@@ -13,7 +13,9 @@ ruff = "*"
 pip = "*"
 
 [tasks]
-shoot = "topograph shoot"
+version = "topograph version"
+shoot = "topograph gun shoot"
+load = "topograph gun load"
 
 [pypi-dependencies]
 python-dotenv = "*"
