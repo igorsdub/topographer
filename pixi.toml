@@ -14,6 +14,7 @@ pip = "*"
 
 [tasks]
 version = "topograph version"
+completion = "topograph --install-completion"
 shoot = "topograph gun shoot"
 load = "topograph gun load"
 
