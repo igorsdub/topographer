@@ -112,6 +112,23 @@ J --> K[Compute simplification<br/>using persistence threshold]
 K --> L([Simplified contour tree<br/>and persistence summary])
 ```
 
+## CLI Convert Example
+
+Use `topograph convert` to convert graph files between `pkl`, `graphml`, `gml`, `gexf`, and `json`.
+
+Show command help:
+
+```bash
+topograph convert --help
+```
+
+Convert between formats:
+
+```bash
+topograph convert data/source.pkl data/converted.json
+topograph convert data/source.graphml data/converted.gml --source-format graphml --target-format gml
+```
+
 # References
 
 ## Package Building

@@ -22,6 +22,7 @@ load = "topograph gun load"
 python-dotenv = "*"
 rich = "*"
 typer = "*"
+networkx = "*"
 topograph = { path = ".", editable = true }
 
 [package]
@@ -40,3 +41,4 @@ hatchling = "*"
 [package.run-dependencies]
 rich = "*"
 typer = "*"
+networkx = "*"

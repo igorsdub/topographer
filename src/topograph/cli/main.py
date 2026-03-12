@@ -1,8 +1,11 @@
 """Main CLI entry point."""
 
+from pathlib import Path
+
 import typer
 
-from ..transforms import app as transforms_app
+from topograph.io.convert import convert_graph
+
 from ..version import app as version_app
 from . import (
     contour_tree,
@@ -15,8 +18,6 @@ from . import (
 
 app = typer.Typer()
 
-# Add main app commands
-app.add_typer(transforms_app, name="transforms")
 app.add_typer(version_app)
 
 # Add algorithm-specific subcommands
@@ -28,3 +29,28 @@ app.add_typer(simplify.app, name="simplify")
 
 # Add run subcommand
 app.add_typer(run.app, name="run")
+
+
+@app.command()
+def convert(
+    source_path: Path,
+    target_path: Path,
+    source_format: str | None = typer.Option(
+        None,
+        "--source-format",
+        help="Source graph format. If omitted, inferred from source extension.",
+    ),
+    target_format: str | None = typer.Option(
+        None,
+        "--target-format",
+        help="Target graph format. If omitted, inferred from target extension.",
+    ),
+) -> None:
+    """Convert a graph between supported formats."""
+    convert_graph(
+        source_path=source_path,
+        target_path=target_path,
+        source_format=source_format,
+        target_format=target_format,
+    )
+    typer.echo(f"Converted graph: {source_path} -> {target_path}")
