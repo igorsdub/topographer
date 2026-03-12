@@ -59,3 +59,20 @@ Topological analysis on graphs and networks.
 
 --------
 
+# References
+
+## Package Building
+
+- <https://pixi.prefix.dev/latest/build/python/>
+- <https://packaging.python.org/>
+- <https://typer.tiangolo.com/tutorial/package/>
+- <https://typer.tiangolo.com/tutorial/one-file-per-command/>
+
+## Topology
+
+- <https://topology-tool-kit.github.io/>
+- <https://github.com/maljovec/topopy>
+
+## Graphs and Networks
+
+- <https://networkx.org/en/>
