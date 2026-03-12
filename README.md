@@ -45,7 +45,7 @@ Topological analysis on graphs and networks.
 │       │   ├── join_tree.py
 │       │   ├── contour_tree.py
 │       │   ├── persistence.py
-│       │   └── simplify.py
+│       │   └── simplification.py
 │       ├── core/               <- Core utilities and data structures
 │       │   ├── __init__.py
 │       │   ├── validation.py
