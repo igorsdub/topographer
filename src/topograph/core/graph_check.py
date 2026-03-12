@@ -1,5 +1,7 @@
 import networkx as nx
 
+from topograph.core.uniqueness import assert_unique_scalar_values
+
 
 def check_graph(
     G: nx.Graph,
@@ -21,8 +23,6 @@ def check_graph(
     if require_connected and not nx.is_connected(G):
         raise ValueError("Graph must be connected")
 
-    values = []
-
     for node, data in G.nodes(data=True):
         if scalar_attr not in data:
             raise ValueError(f"Node {node} missing scalar attribute '{scalar_attr}'")
@@ -32,9 +32,6 @@ def check_graph(
         if not isinstance(value, (int, float)):
             raise ValueError(f"Scalar value on node {node} must be numeric")
 
-        values.append(value)
-
-    if len(values) != len(set(values)):
-        raise ValueError("Duplicate scalar values detected")
+    assert_unique_scalar_values(G, scalar_attr=scalar_attr)
 
     return True
