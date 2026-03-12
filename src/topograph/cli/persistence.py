@@ -1,11 +1,17 @@
 """Persistence command implementations."""
 
+from pathlib import Path
+
 import typer
+
+from ._validation import load_and_validate_graph_or_exit
 
 app = typer.Typer()
 
 
 @app.command()
-def compute(input_file: str, output_file: str):
+def compute(input_file: Path, output_file: Path):
     """Compute persistence pairs from topological structure."""
+    load_and_validate_graph_or_exit(input_file)
+
     typer.echo(f"Computing persistence: {input_file} -> {output_file}")
