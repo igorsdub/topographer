@@ -6,7 +6,9 @@
 
 Topological analysis on graphs and networks.
 
-## Project Structure
+## Project Oragnization
+
+### Structure
 
 ```text
 ├── .gitignore
@@ -71,7 +73,38 @@ Topological analysis on graphs and networks.
 └── pixi.toml                   <- Pixi environment configuration
 ```
 
---------
+### Workflow
+
+```mermaid
+---
+config:
+  look: handDrawn
+  theme: neutral
+---
+flowchart TD
+
+A([Graph G<br/>w/ scalar function f]) --> B[Validate graph and<br/>scalar attribute]
+
+B --> C{Are scalar values unique?}
+
+C -->|No| D[ Perturb tied scalar values<br/>to obtain f' ]
+C -->|Yes| E([Graph G<br/>w/ scalar function f])
+
+D --> F([Graph G<br/>w/ perturbed scalar f'])
+E --> F
+
+F --> G[Compute split tree]
+F --> H[Compute join tree]
+
+G --> I[Compute contour tree<br/>from split and join trees]
+H --> I
+
+I --> J[Compute persistence<br/>of contour tree]
+
+J --> K[Compute simplification<br/>using persistence threshold]
+
+K --> L([Simplified contour tree<br/>and persistence summary])
+```
 
 # References
 
