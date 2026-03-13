@@ -15,6 +15,7 @@ from . import (
     run,
     simplify,
     split_tree,
+    tree,
 )
 
 app = typer.Typer()
@@ -28,6 +29,7 @@ app.add_typer(contour_tree.app, name="contour-tree")
 app.add_typer(persistence.app, name="persistence")
 app.add_typer(simplify.app, name="simplify")
 app.add_typer(perturb.app, name="perturb")
+app.add_typer(tree.app, name="tree")
 
 # Add run subcommand
 app.add_typer(run.app, name="run")

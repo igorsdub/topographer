@@ -158,6 +158,17 @@ topographer perturb data/input.pkl data/output.pkl --scalar scalar --output-scal
 The command writes a new graph file with tied groups perturbed in a deterministic
 lexicographic order.
 
+## Tree CLI (Join/Split)
+
+Use the staged tree commands to compute join and split trees:
+
+```bash
+topographer tree join data/input.pkl data/join_tree.pkl
+topographer tree split data/input.pkl data/split_tree.pkl
+topographer tree split data/input.pkl data/split_tree_aug.pkl --augmented
+```
+
+
 # References
 
 ## Package Building
