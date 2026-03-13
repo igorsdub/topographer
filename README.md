@@ -129,6 +129,28 @@ topographer convert data/source.pkl data/converted.json
 topographer convert data/source.graphml data/converted.gml --source-format graphml --target-format gml
 ```
 
+## Perturbation Module
+
+Use `topographer.transforms.perturb` to deterministically break tied scalar values
+without changing graph topology.
+
+Main API:
+
+- `has_ties(G, scalar)`
+- `find_ties(G, scalar)`
+- `perturb_ties(G, scalar, ...)`
+- `is_strictly_ordered(G, scalar)`
+
+CLI usage:
+
+```bash
+topographer perturb data/input.pkl data/output.pkl
+topographer perturb data/input.pkl data/output.pkl --scalar scalar --output-scalar scalar_perturbed
+```
+
+The command writes a new graph file with tied groups perturbed in a deterministic
+lexicographic order.
+
 # References
 
 ## Package Building

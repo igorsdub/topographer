@@ -11,6 +11,7 @@ from . import (
     contour_tree,
     join_tree,
     persistence,
+    perturb,
     run,
     simplify,
     split_tree,
@@ -26,6 +27,7 @@ app.add_typer(join_tree.app, name="join-tree")
 app.add_typer(contour_tree.app, name="contour-tree")
 app.add_typer(persistence.app, name="persistence")
 app.add_typer(simplify.app, name="simplify")
+app.add_typer(perturb.app, name="perturb")
 
 # Add run subcommand
 app.add_typer(run.app, name="run")

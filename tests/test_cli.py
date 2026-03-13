@@ -4,8 +4,13 @@ import networkx as nx
 from typer.testing import CliRunner
 
 from topographer.cli.main import app
-from topographer.examples import easy_path_graph, invalid_missing_scalar_graph
+from topographer.examples import (
+    easy_path_graph,
+    invalid_duplicate_scalar_graph,
+    invalid_missing_scalar_graph,
+)
 from topographer.io.load import load_graph
+from topographer.transforms.perturb import is_strictly_ordered
 
 runner = CliRunner()
 
@@ -68,3 +73,38 @@ def test_run_pipeline_validates_graph_before_execution(tmp_path):
 
     assert result.exit_code == 0
     assert "Running pipeline" in result.stdout
+
+
+def test_perturb_ties_cli_writes_perturbed_scalar(tmp_path):
+    source_path = tmp_path / "tied.pkl"
+    output_path = tmp_path / "perturbed.pkl"
+
+    graph = invalid_duplicate_scalar_graph()
+    _write_graph(source_path, graph)
+
+    result = runner.invoke(
+        app,
+        ["perturb", str(source_path), str(output_path)],
+    )
+
+    assert result.exit_code == 0
+    assert "Perturbed scalar ties" in result.stdout
+
+    loaded = load_graph(output_path)
+    assert is_strictly_ordered(loaded, "scalar_perturbed")
+
+
+def test_perturb_ties_cli_rejects_missing_scalar_attribute(tmp_path):
+    source_path = tmp_path / "missing_scalar.pkl"
+    output_path = tmp_path / "perturbed.pkl"
+
+    graph = invalid_missing_scalar_graph()
+    _write_graph(source_path, graph)
+
+    result = runner.invoke(
+        app,
+        ["perturb", str(source_path), str(output_path)],
+    )
+
+    assert result.exit_code == 1
+    assert "Missing scalar attribute" in result.stdout
