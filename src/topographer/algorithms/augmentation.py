@@ -5,6 +5,7 @@ from typing import Any
 
 import networkx as nx
 
+from topographer.models.contour_tree import ContourTreeResult
 from topographer.models.split_join import JoinTreeResult, SplitTreeResult
 
 
@@ -53,4 +54,21 @@ def augment_split_tree(result: SplitTreeResult) -> SplitTreeResult:
     )
 
 
-__all__ = ["augment_tree_from_arc_vertices", "augment_join_tree", "augment_split_tree"]
+def augment_contour_tree(result: ContourTreeResult) -> ContourTreeResult:
+    augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
+
+    return ContourTreeResult(
+        tree=augmented_tree,
+        scalar=result.scalar,
+        augmented=True,
+        critical_nodes=result.critical_nodes,
+        arc_vertices=result.arc_vertices,
+    )
+
+
+__all__ = [
+    "augment_tree_from_arc_vertices",
+    "augment_join_tree",
+    "augment_split_tree",
+    "augment_contour_tree",
+]

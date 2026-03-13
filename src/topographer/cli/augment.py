@@ -4,7 +4,12 @@ from pathlib import Path
 
 import typer
 
-from topographer.algorithms.augmentation import augment_join_tree, augment_split_tree
+from topographer.algorithms.augmentation import (
+    augment_contour_tree,
+    augment_join_tree,
+    augment_split_tree,
+)
+from topographer.algorithms.contour_tree import compute_contour_tree
 from topographer.algorithms.join_tree import compute_join_tree
 from topographer.algorithms.split_tree import compute_split_tree
 from topographer.io.save import save_graph
@@ -40,3 +45,17 @@ def split(
     result = augment_split_tree(base)
     save_graph(result.tree, output_file)
     typer.echo(f"Computed augmented split tree: {input_file} -> {output_file}")
+
+
+@app.command("contour")
+def contour(
+    input_file: Path,
+    output_file: Path,
+    scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
+):
+    """Compute augmented contour tree as a post-construction stage."""
+    graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
+    base = compute_contour_tree(graph, scalar=scalar)
+    result = augment_contour_tree(base)
+    save_graph(result.tree, output_file)
+    typer.echo(f"Computed augmented contour tree: {input_file} -> {output_file}")

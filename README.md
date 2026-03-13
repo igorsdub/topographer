@@ -136,7 +136,7 @@ topographer convert data/source.pkl data/converted.json
 topographer convert data/source.graphml data/converted.gml --source-format graphml --target-format gml
 ```
 
-## Perturbation Module
+## Breaking Ties
 
 Use `topographer.transforms.perturb` to deterministically break tied scalar values
 without changing graph topology.
@@ -158,15 +158,31 @@ topographer perturb data/input.pkl data/output.pkl --scalar scalar --output-scal
 The command writes a new graph file with tied groups perturbed in a deterministic
 lexicographic order.
 
-## Tree CLI (Join/Split)
+## Trees
 
-Use the staged tree commands to compute join and split trees:
+Use staged commands to compute base trees first, then run augmentation as a
+separate step:
 
 ```bash
 topographer tree join data/input.pkl data/join_tree.pkl
 topographer tree split data/input.pkl data/split_tree.pkl
+topographer tree contour data/input.pkl data/contour_tree.pkl
+
 topographer augment join data/input.pkl data/join_tree_aug.pkl
 topographer augment split data/input.pkl data/split_tree_aug.pkl
+topographer augment contour data/input.pkl data/contour_tree_aug.pkl
+```
+
+Contour tree construction does not perform augmentation automatically.
+Use `topographer augment contour ...` when you need the augmented contour tree.
+
+API usage follows the same staged pattern:
+
+```python
+from topographer import compute_contour_tree, augment_contour_tree
+
+CT = compute_contour_tree(graph, scalar="scalar")
+aCT = augment_contour_tree(base)
 ```
 
 # References
