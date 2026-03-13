@@ -1,3 +1,4 @@
+import json
 import pickle
 
 import networkx as nx
@@ -108,3 +109,63 @@ def test_perturb_ties_cli_rejects_missing_scalar_attribute(tmp_path):
 
     assert result.exit_code == 1
     assert "Missing scalar attribute" in result.stdout
+
+
+def test_persistence_compute_split_join_mode_writes_pairs(tmp_path):
+    source_path = tmp_path / "input.pkl"
+    output_path = tmp_path / "persistence_split_join.json"
+
+    graph = easy_path_graph(6)
+    _write_graph(source_path, graph)
+
+    result = runner.invoke(
+        app,
+        [
+            "persistence",
+            "compute",
+            str(source_path),
+            str(output_path),
+            "--mode",
+            "split-join",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert "Computed persistence" in result.stdout
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["mode"] == "split-join"
+    assert payload["scalar"] == "scalar"
+    assert len(payload["pairs"]) == 1
+    assert payload["pairs"][0]["persistence"] == 5.0
+
+
+def test_persistence_compute_contour_mode_writes_pairs(tmp_path):
+    source_path = tmp_path / "input.pkl"
+    output_path = tmp_path / "persistence_contour.json"
+
+    graph = easy_path_graph(6)
+    _write_graph(source_path, graph)
+
+    result = runner.invoke(
+        app,
+        [
+            "persistence",
+            "compute",
+            str(source_path),
+            str(output_path),
+            "--mode",
+            "contour",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert "Computed persistence" in result.stdout
+
+    payload = json.loads(output_path.read_text(encoding="utf-8"))
+    assert payload["mode"] == "contour"
+    assert payload["scalar"] == "scalar"
+    assert len(payload["pairs"]) == 1
+    assert payload["pairs"][0]["persistence"] == 5.0

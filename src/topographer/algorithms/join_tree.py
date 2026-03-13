@@ -11,7 +11,7 @@ from topographer.algorithms._merge_rules import (
 )
 from topographer.algorithms._sweep import sweep_ascending
 from topographer.core.graph_check import check_graph
-from topographer.models.split_join import JoinTreeResult
+from topographer.models.tree import JoinTree
 
 
 def compute_join_tree(
@@ -19,7 +19,7 @@ def compute_join_tree(
     scalar: str = "scalar",
     *,
     require_connected: bool = True,
-) -> JoinTreeResult:
+) -> JoinTree:
     check_graph(G, scalar_attr=scalar, require_connected=require_connected)
 
     context = SweepContext()
@@ -34,13 +34,18 @@ def compute_join_tree(
 
     critical_nodes = sorted(context.critical_nodes, key=lambda node: G.nodes[node][scalar])
 
-    return JoinTreeResult(
-        tree=context.tree,
+    node_metadata = {
+        node: {scalar: G.nodes[node][scalar]} for node in context.tree.nodes() if node in G.nodes
+    }
+
+    return JoinTree(
+        graph=context.tree,
         root=root,
         critical_nodes=critical_nodes,
         scalar=scalar,
         augmented=False,
         arc_vertices=context.arc_vertices,
+        node_metadata=node_metadata,
     )
 
 

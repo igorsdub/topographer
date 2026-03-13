@@ -54,8 +54,7 @@ Topological analysis on graphs and networks.
 │       │   └── unionfind.py
 │       ├── models/             <- Data models and structures
 │       │   ├── __init__.py
-│       │   ├── split_join.py
-│       │   ├── contour_tree.py
+│       │   ├── tree.py
 │       │   └── persistence.py
 │       ├── io/                 <- Input/output handlers
 │       │   ├── __init__.py
@@ -182,7 +181,47 @@ API usage follows the same staged pattern:
 from topographer import compute_contour_tree, augment_contour_tree
 
 CT = compute_contour_tree(graph, scalar="scalar")
-aCT = augment_contour_tree(base)
+aCT = augment_contour_tree(CT)
+```
+
+`CT` is a rich wrapper object with graph topology plus split/join context:
+
+- `CT.graph`: contour tree topology (`nx.Graph`)
+- `CT.JT` / `CT.join_tree`: join tree wrapper
+- `CT.ST` / `CT.split_tree`: split tree wrapper
+- `CT.scalar`: scalar attribute name
+
+## Persistence
+
+Persistence is available via two explicit paths:
+
+- split/join first, then persistence
+- contour tree wrapper, then persistence
+
+CLI usage:
+
+```bash
+topographer persistence compute data/input.pkl data/persistence_split_join.json --mode split-join
+topographer persistence compute data/input.pkl data/persistence_contour.json --mode contour
+```
+
+API usage:
+
+```python
+from topographer.algorithms.contour_tree import compute_contour_tree
+from topographer.algorithms.join_tree import compute_join_tree
+from topographer.algorithms.persistence import (
+    compute_persistence_from_contour_tree,
+    compute_persistence_from_split_join,
+)
+from topographer.algorithms.split_tree import compute_split_tree
+
+ST = compute_split_tree(graph, scalar="scalar")
+JT = compute_join_tree(graph, scalar="scalar")
+pairs_split_join = compute_persistence_from_split_join(ST, JT)
+
+CT = compute_contour_tree(graph, scalar="scalar")
+pairs_contour = compute_persistence_from_contour_tree(CT)
 ```
 
 # References

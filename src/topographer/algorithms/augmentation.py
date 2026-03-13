@@ -5,8 +5,7 @@ from typing import Any
 
 import networkx as nx
 
-from topographer.models.contour_tree import ContourTreeResult
-from topographer.models.split_join import JoinTreeResult, SplitTreeResult
+from topographer.models.tree import ContourTree, JoinTree, SplitTree
 
 
 def augment_tree_from_arc_vertices(
@@ -28,41 +27,46 @@ def augment_tree_from_arc_vertices(
     return augmented_tree
 
 
-def augment_join_tree(result: JoinTreeResult) -> JoinTreeResult:
+def augment_join_tree(result: JoinTree) -> JoinTree:
     augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
 
-    return JoinTreeResult(
-        tree=augmented_tree,
+    return JoinTree(
+        graph=augmented_tree,
         root=result.root,
         critical_nodes=result.critical_nodes,
         scalar=result.scalar,
         augmented=True,
         arc_vertices=result.arc_vertices,
+        node_metadata=result.node_metadata,
     )
 
 
-def augment_split_tree(result: SplitTreeResult) -> SplitTreeResult:
+def augment_split_tree(result: SplitTree) -> SplitTree:
     augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
 
-    return SplitTreeResult(
-        tree=augmented_tree,
+    return SplitTree(
+        graph=augmented_tree,
         root=result.root,
         critical_nodes=result.critical_nodes,
         scalar=result.scalar,
         augmented=True,
         arc_vertices=result.arc_vertices,
+        node_metadata=result.node_metadata,
     )
 
 
-def augment_contour_tree(result: ContourTreeResult) -> ContourTreeResult:
+def augment_contour_tree(result: ContourTree) -> ContourTree:
     augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
 
-    return ContourTreeResult(
-        tree=augmented_tree,
+    return ContourTree(
+        graph=augmented_tree,
         scalar=result.scalar,
+        split_tree=result.split_tree,
+        join_tree=result.join_tree,
         augmented=True,
         critical_nodes=result.critical_nodes,
         arc_vertices=result.arc_vertices,
+        node_metadata=result.node_metadata,
     )
 
 

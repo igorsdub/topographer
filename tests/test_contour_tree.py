@@ -15,9 +15,9 @@ from topographer.examples import easy_path_graph, easy_star_graph
 def test_merge_split_join_trees_combines_edges_and_traces():
     graph = easy_path_graph(6)
 
-    split = compute_split_tree(graph, scalar="scalar")
-    join = compute_join_tree(graph, scalar="scalar")
-    merged_tree, merged_arc_vertices = merge_split_join_trees(split, join)
+    ST = compute_split_tree(graph, scalar="scalar")
+    JT = compute_join_tree(graph, scalar="scalar")
+    merged_tree, merged_arc_vertices = merge_split_join_trees(ST, JT)
 
     assert set(merged_tree.nodes()) == {0, 5}
     normalized_edges = {tuple(sorted(edge)) for edge in merged_tree.edges()}
@@ -47,23 +47,25 @@ def test_reduce_degree_two_nodes_suppresses_chain_vertices():
 def test_compute_contour_tree_from_split_join_returns_non_augmented_tree():
     graph = easy_star_graph(6)
 
-    split = compute_split_tree(graph, scalar="scalar")
-    join = compute_join_tree(graph, scalar="scalar")
-    contour = compute_contour_tree_from_split_join(split, join)
+    ST = compute_split_tree(graph, scalar="scalar")
+    JT = compute_join_tree(graph, scalar="scalar")
+    CT = compute_contour_tree_from_split_join(ST, JT)
 
-    assert contour.scalar == "scalar"
-    assert contour.augmented is False
-    assert contour.tree.number_of_nodes() > 0
-    assert contour.tree.number_of_edges() > 0
+    assert CT.scalar == "scalar"
+    assert CT.augmented is False
+    assert CT.graph.number_of_nodes() > 0
+    assert CT.graph.number_of_edges() > 0
+    assert CT.ST is ST
+    assert CT.JT is JT
 
 
 def test_augment_contour_tree_keeps_all_vertices_on_path_graph():
     graph = easy_path_graph(6)
 
-    contour = compute_contour_tree(graph, scalar="scalar")
-    augmented = augment_contour_tree(contour)
+    CT = compute_contour_tree(graph, scalar="scalar")
+    augmented = augment_contour_tree(CT)
 
-    assert contour.augmented is False
+    assert CT.augmented is False
     assert augmented.augmented is True
     assert set(graph.nodes()).issubset(augmented.tree.nodes())
     assert augmented.tree.number_of_edges() == graph.number_of_edges()

@@ -4,7 +4,7 @@ from collections.abc import Hashable
 
 import networkx as nx
 
-from topographer.models.split_join import JoinTreeResult, SplitTreeResult
+from topographer.models.tree import JoinTree, SplitTree
 
 
 def _edge_key(a: Hashable, b: Hashable) -> tuple[Hashable, Hashable]:
@@ -24,21 +24,21 @@ def _canonicalize_path(path: list[Hashable]) -> list[Hashable]:
 
 
 def merge_split_join_trees(
-    split_result: SplitTreeResult,
-    join_result: JoinTreeResult,
+    ST: SplitTree,
+    JT: JoinTree,
 ) -> tuple[nx.Graph, dict[tuple[Hashable, Hashable], list[Hashable]]]:
-    if split_result.scalar != join_result.scalar:
+    if ST.scalar != JT.scalar:
         raise ValueError("Split tree and join tree must use the same scalar attribute")
 
     merged_tree = nx.Graph()
-    merged_tree.add_nodes_from(split_result.tree.nodes())
-    merged_tree.add_nodes_from(join_result.tree.nodes())
-    merged_tree.add_edges_from(_edge_key(a, b) for a, b in split_result.tree.edges())
-    merged_tree.add_edges_from(_edge_key(a, b) for a, b in join_result.tree.edges())
+    merged_tree.add_nodes_from(ST.tree.nodes())
+    merged_tree.add_nodes_from(JT.tree.nodes())
+    merged_tree.add_edges_from(_edge_key(a, b) for a, b in ST.tree.edges())
+    merged_tree.add_edges_from(_edge_key(a, b) for a, b in JT.tree.edges())
 
     merged_arc_vertices: dict[tuple[Hashable, Hashable], list[Hashable]] = {}
 
-    for source in (split_result.arc_vertices, join_result.arc_vertices):
+    for source in (ST.arc_vertices, JT.arc_vertices):
         for edge, path in source.items():
             key = _edge_key(edge[0], edge[1])
             canonical_path = _canonicalize_path(path)
