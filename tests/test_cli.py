@@ -169,3 +169,31 @@ def test_persistence_compute_contour_mode_writes_pairs(tmp_path):
     assert payload["scalar"] == "scalar"
     assert len(payload["pairs"]) == 1
     assert payload["pairs"][0]["persistence"] == 5.0
+
+
+def test_simplify_threshold_command_writes_simplified_contour_tree(tmp_path):
+    source_path = tmp_path / "input.pkl"
+    output_path = tmp_path / "simplified.pkl"
+
+    graph = easy_path_graph(6)
+    _write_graph(source_path, graph)
+
+    result = runner.invoke(
+        app,
+        [
+            "simplify",
+            "threshold",
+            str(source_path),
+            str(output_path),
+            "--epsilon",
+            "0.5",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert "Simplified contour tree" in result.stdout
+
+    out_graph = load_graph(output_path)
+    assert out_graph.number_of_nodes() > 0
+    assert out_graph.number_of_edges() > 0

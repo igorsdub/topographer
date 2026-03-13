@@ -4,6 +4,10 @@ from pathlib import Path
 
 import typer
 
+from topographer.algorithms.contour_tree import compute_contour_tree
+from topographer.algorithms.simplification import simplify_contour_tree
+from topographer.io.save import save_graph
+
 from ._validation import load_and_validate_graph_or_exit
 
 app = typer.Typer()
@@ -14,8 +18,16 @@ def threshold(
     input_file: Path,
     output_file: Path,
     epsilon: float = typer.Option(..., help="Simplification threshold"),
+    scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Simplify topological structure using persistence threshold."""
-    load_and_validate_graph_or_exit(input_file)
+    """Simplify contour tree using persistence threshold.
 
-    typer.echo(f"Simplifying with epsilon={epsilon}: {input_file} -> {output_file}")
+    The command computes CT context from input graph, simplifies JT and ST
+    separately with ``epsilon``, then recomputes and saves the simplified CT.
+    """
+    graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
+    contour_tree = compute_contour_tree(graph, scalar=scalar)
+    simplified = simplify_contour_tree(contour_tree, threshold=epsilon)
+    save_graph(simplified.tree, output_file)
+
+    typer.echo(f"Simplified contour tree with epsilon={epsilon}: {input_file} -> {output_file}")

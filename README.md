@@ -224,6 +224,31 @@ CT = compute_contour_tree(graph, scalar="scalar")
 pairs_contour = compute_persistence_from_contour_tree(CT)
 ```
 
+## Simplification
+
+Simplification mirrors TTK-style orchestration:
+
+- simplify `JT` with a persistence threshold
+- simplify `ST` with the same threshold
+- recompute `CT` from the simplified `JT` and `ST`
+
+CLI usage:
+
+```bash
+topographer simplify threshold data/input.pkl data/contour_simplified.pkl --epsilon 0.5
+topographer simplify threshold data/input.pkl data/contour_simplified.pkl --epsilon 1.0 --scalar scalar
+```
+
+API usage:
+
+```python
+from topographer.algorithms.contour_tree import compute_contour_tree
+from topographer.algorithms.simplification import simplify_contour_tree
+
+CT = compute_contour_tree(graph, scalar="scalar")
+CT_simplified = simplify_contour_tree(CT, threshold=0.5)
+```
+
 # References
 
 ## Package Building
