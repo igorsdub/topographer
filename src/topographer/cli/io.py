@@ -1,4 +1,4 @@
-"""I/O command implementations."""
+"""CLI commands for graph file loading, saving, and conversion."""
 
 from pathlib import Path
 
@@ -20,7 +20,7 @@ def load(
         help="Input graph format. If omitted, inferred from input extension.",
     ),
 ) -> None:
-    """Load a graph and print a short summary."""
+    """Load a graph file and print a compact nodes/edges summary."""
     graph = load_graph(input_path, file_format=file_format)
     typer.echo(
         f"Loaded graph from {input_path}: nodes={graph.number_of_nodes()} edges={graph.number_of_edges()}"
@@ -42,7 +42,7 @@ def save(
         help="Output graph format. If omitted, inferred from output extension.",
     ),
 ) -> None:
-    """Load a graph and save it to another path."""
+    """Read a graph from one location and write it to another format/path."""
     graph = load_graph(input_path, file_format=input_format)
     save_graph(graph, output_path, file_format=output_format)
     typer.echo(f"Saved graph to {output_path}")
@@ -63,7 +63,7 @@ def convert(
         help="Target graph format. If omitted, inferred from target extension.",
     ),
 ) -> None:
-    """Convert a graph between supported formats."""
+    """Convert a graph file between supported serialization formats."""
     convert_graph(
         source_path=source_path,
         target_path=target_path,

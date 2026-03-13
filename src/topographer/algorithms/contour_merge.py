@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Merge split and join trees into a combined contour-tree skeleton."""
+
 from collections.abc import Hashable
 
 import networkx as nx
@@ -8,11 +10,13 @@ from topographer.models.tree import JoinTree, SplitTree
 
 
 def _edge_key(a: Hashable, b: Hashable) -> tuple[Hashable, Hashable]:
+    """Return canonical undirected edge key for map indexing."""
     ordered = sorted((a, b), key=repr)
     return ordered[0], ordered[1]
 
 
 def _canonicalize_path(path: list[Hashable]) -> list[Hashable]:
+    """Choose deterministic orientation for an undirected path."""
     if len(path) <= 1:
         return path
 
@@ -27,6 +31,11 @@ def merge_split_join_trees(
     ST: SplitTree,
     JT: JoinTree,
 ) -> tuple[nx.Graph, dict[tuple[Hashable, Hashable], list[Hashable]]]:
+    """Merge split and join tree edges and reconcile arc vertex paths.
+
+    For duplicate edges present in both trees, the longer recorded arc path is
+    retained as a richer trace of original graph vertices.
+    """
     if ST.scalar != JT.scalar:
         raise ValueError("Split tree and join tree must use the same scalar attribute")
 

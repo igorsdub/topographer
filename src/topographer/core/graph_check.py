@@ -1,3 +1,9 @@
+"""Validation helpers for graph-based topological computations.
+
+These checks enforce baseline assumptions used by split/join tree,
+contour tree, and persistence algorithms.
+"""
+
 import networkx as nx
 
 from topographer.core.uniqueness import assert_unique_scalar_values
@@ -8,10 +14,25 @@ def check_graph(
     scalar_attr: str = "scalar",
     require_connected: bool = True,
 ):
-    """
-    Validate graph and scalar attribute for TopoGraph algorithms.
+    """Validate that a graph is ready for Topographer algorithms.
 
-    Only implements minimal checks needed for tests.
+    The function verifies graph type, non-emptiness, optional connectivity,
+    scalar attribute presence on every node, scalar numeric type, and global
+    scalar uniqueness.
+
+    Parameters
+    ----------
+    G:
+        Input NetworkX graph.
+    scalar_attr:
+        Node attribute name that stores scalar values.
+    require_connected:
+        If ``True``, the graph must have exactly one connected component.
+
+    Returns
+    -------
+    bool
+        ``True`` when all checks pass.
     """
 
     if not isinstance(G, nx.Graph):

@@ -10,6 +10,7 @@ from topographer.transforms.perturb import (
 
 
 def test_find_ties_and_has_ties_detect_duplicates() -> None:
+    """Ensure duplicate scalar groups are detected and returned consistently."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [
@@ -26,6 +27,7 @@ def test_find_ties_and_has_ties_detect_duplicates() -> None:
 
 
 def test_is_strictly_ordered_reports_unique_values() -> None:
+    """Ensure strictly ordered scalar values are recognized as unique."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [
@@ -39,6 +41,7 @@ def test_is_strictly_ordered_reports_unique_values() -> None:
 
 
 def test_perturb_ties_creates_default_output_scalar_without_mutating_input() -> None:
+    """Verify default perturbation writes to a new attribute and leaves input unchanged."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [
@@ -59,6 +62,7 @@ def test_perturb_ties_creates_default_output_scalar_without_mutating_input() -> 
 
 
 def test_perturb_ties_inplace_overwrites_input_scalar_when_requested() -> None:
+    """Verify in-place perturbation overwrites the source scalar using requested epsilon."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [
@@ -78,6 +82,7 @@ def test_perturb_ties_inplace_overwrites_input_scalar_when_requested() -> None:
 
 
 def test_perturb_ties_no_ties_returns_unchanged_values() -> None:
+    """Ensure perturbation reports no-op behavior when the scalar field has no ties."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [
@@ -96,6 +101,7 @@ def test_perturb_ties_no_ties_returns_unchanged_values() -> None:
 
 
 def test_perturb_ties_rejects_unsupported_method() -> None:
+    """Ensure unsupported perturbation methods are rejected with a clear error."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [
@@ -109,6 +115,7 @@ def test_perturb_ties_rejects_unsupported_method() -> None:
 
 
 def test_perturb_ties_rejects_non_positive_epsilon() -> None:
+    """Ensure non-positive epsilon values are rejected during perturbation."""
     graph = nx.Graph()
     graph.add_nodes_from(
         [

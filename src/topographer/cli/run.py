@@ -1,4 +1,4 @@
-"""Run command implementations."""
+"""Composite CLI commands that orchestrate multi-step workflows."""
 
 from pathlib import Path
 
@@ -11,7 +11,7 @@ app = typer.Typer()
 
 @app.command()
 def pipeline(input_file: Path, output_file: Path):
-    """Run the complete topographic analysis pipeline."""
+    """Validate input graph and run the end-to-end topographic pipeline."""
     load_and_validate_graph_or_exit(input_file)
 
     typer.echo(f"Running pipeline: {input_file} -> {output_file}")

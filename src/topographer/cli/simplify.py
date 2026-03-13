@@ -1,4 +1,4 @@
-"""Simplification command implementations."""
+"""CLI commands for persistence-threshold simplification."""
 
 from pathlib import Path
 
@@ -20,7 +20,7 @@ def threshold(
     epsilon: float = typer.Option(..., help="Simplification threshold"),
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Simplify contour tree using persistence threshold.
+    """Simplify contour-tree context using a persistence threshold.
 
     The command computes CT context from input graph, simplifies JT and ST
     separately with ``epsilon``, then recomputes and saves the simplified CT.

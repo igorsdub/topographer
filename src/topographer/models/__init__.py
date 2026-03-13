@@ -1,3 +1,5 @@
+"""Public model exports for tree-based result containers."""
+
 from topographer.models.tree import (
     CT,
     JT,

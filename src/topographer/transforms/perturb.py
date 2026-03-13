@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""Deterministic tie-breaking for node scalar fields.
+
+The perturbation keeps the original ordering between distinct scalar values and
+splits ties by adding tiny offsets in a stable node order.
+"""
+
 from collections.abc import Hashable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -14,6 +20,12 @@ else:
 
 @dataclass
 class PerturbationResult:
+    """Summary of a perturbation run.
+
+    Attributes capture whether ties were found, which nodes changed, and where
+    perturbed values were written.
+    """
+
     graph: GraphType
     input_scalar: str
     output_scalar: str
@@ -25,6 +37,7 @@ class PerturbationResult:
 
 
 def _group_nodes_by_value(G: GraphType, scalar: str) -> dict[float, list[Hashable]]:
+    """Group graph nodes by identical scalar value."""
     grouped: dict[float, list[Hashable]] = {}
     for node, attrs in G.nodes(data=True):
         value = float(attrs[scalar])
@@ -33,10 +46,16 @@ def _group_nodes_by_value(G: GraphType, scalar: str) -> dict[float, list[Hashabl
 
 
 def _default_output_scalar(scalar: str) -> str:
+    """Return default output attribute name for perturbed scalars."""
     return f"{scalar}_perturbed"
 
 
 def _choose_epsilon(values: list[float]) -> float:
+    """Choose a small positive perturbation step from observed values.
+
+    When at least two distinct values exist, epsilon is chosen small enough to
+    avoid changing their relative order.
+    """
     if not values:
         return 1e-12
 
@@ -51,31 +70,37 @@ def _choose_epsilon(values: list[float]) -> float:
 
 
 def _stable_node_order(nodes: list[Hashable]) -> list[Hashable]:
+    """Sort nodes deterministically for repeatable perturbations."""
     return sorted(nodes, key=lambda node: (type(node).__qualname__, repr(node)))
 
 
 def _perturb_group(
     nodes: list[Hashable], base_value: float, epsilon: float
 ) -> dict[Hashable, float]:
+    """Assign monotone offsets to tied nodes."""
     return {node: base_value + index * epsilon for index, node in enumerate(nodes)}
 
 
 def _copy_or_inplace(G: GraphType, inplace: bool) -> GraphType:
+    """Return either the original graph or a shallow copy."""
     if inplace:
         return G
     return G.copy()
 
 
 def has_ties(G: GraphType, scalar: str) -> bool:
+    """Return ``True`` when at least one scalar value appears multiple times."""
     return any(len(nodes) > 1 for nodes in _group_nodes_by_value(G, scalar).values())
 
 
 def find_ties(G: GraphType, scalar: str) -> dict[float, list[Hashable]]:
+    """Return scalar-value groups that contain ties only."""
     grouped = _group_nodes_by_value(G, scalar)
     return {value: nodes for value, nodes in grouped.items() if len(nodes) > 1}
 
 
 def is_strictly_ordered(G: GraphType, scalar: str) -> bool:
+    """Return ``True`` when all node scalar values are unique."""
     values = [float(attrs[scalar]) for _, attrs in G.nodes(data=True)]
     return len(values) == len(set(values))
 
@@ -89,6 +114,25 @@ def perturb_ties(
     epsilon: float | None = None,
     method: str = "lexicographic",
 ) -> PerturbationResult:
+    """Break scalar ties deterministically via tiny additive offsets.
+
+    Parameters
+    ----------
+    G:
+        Input graph.
+    scalar:
+        Source scalar attribute used to detect ties.
+    output_scalar:
+        Destination attribute for perturbed values. Defaults to
+        ``f"{scalar}_perturbed"``.
+    inplace:
+        If ``True``, mutate ``G`` directly. Otherwise operate on a copy.
+    epsilon:
+        Optional perturbation step. If omitted, an order-preserving value is
+        estimated from existing scalar spacing.
+    method:
+        Tie-breaking strategy. Currently only ``"lexicographic"`` is supported.
+    """
     if method != "lexicographic":
         raise ValueError(f"Unsupported perturbation method: {method}")
 

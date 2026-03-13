@@ -16,7 +16,11 @@ def load_and_validate_graph_or_exit(
     scalar_attr: str = "scalar",
     require_connected: bool = True,
 ) -> nx.Graph:
-    """Load a graph from disk and validate it for algorithm execution."""
+    """Load and validate a graph, exiting the CLI on validation failure.
+
+    This helper centralizes user-friendly error handling for command modules:
+    on invalid input it prints the error and raises ``typer.Exit(code=1)``.
+    """
 
     try:
         graph = load_graph(input_file)

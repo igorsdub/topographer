@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Split-tree construction from a scalar graph."""
+
 from collections.abc import Hashable
 
 import networkx as nx
@@ -20,6 +22,11 @@ def compute_split_tree(
     *,
     require_connected: bool = True,
 ) -> SplitTree:
+    """Compute the split tree using a descending scalar sweep.
+
+    Nodes are visited from high to low scalar value. Component merges and split
+    events are tracked in a sweep context and exported as a ``SplitTree``.
+    """
     check_graph(G, scalar_attr=scalar, require_connected=require_connected)
 
     context = SweepContext()

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Persistence pair computation from contour-tree structure."""
+
 from collections.abc import Hashable
 
 from topographer.algorithms.contour_tree import compute_contour_tree_from_split_join
@@ -8,6 +10,7 @@ from topographer.models.tree import ContourTree, JoinTree, SplitTree
 
 
 def _scalar_for_node(CT: ContourTree, node: Hashable) -> float:
+    """Read scalar metadata for a contour-tree node as ``float``."""
     metadata = CT.node_metadata.get(node)
     if metadata is None or CT.scalar not in metadata:
         raise ValueError(f"Missing scalar metadata for contour tree node: {node!r}")
@@ -16,6 +19,11 @@ def _scalar_for_node(CT: ContourTree, node: Hashable) -> float:
 
 
 def _pairs_from_contour_tree(CT: ContourTree) -> list[PersistencePair]:
+    """Build persistence pairs from contour-tree edges.
+
+    Each contour-tree edge contributes one pair where birth/death are assigned
+    by scalar ordering and persistence is the scalar difference magnitude.
+    """
     pairs: list[PersistencePair] = []
 
     for a, b in CT.graph.edges():
@@ -47,6 +55,7 @@ def compute_persistence_from_split_join(
     ST: SplitTree,
     JT: JoinTree,
 ) -> PersistenceResult:
+    """Compute persistence by first building a contour tree from split/join trees."""
     if ST.scalar != JT.scalar:
         raise ValueError("Split tree and join tree must use the same scalar attribute")
 
@@ -55,6 +64,7 @@ def compute_persistence_from_split_join(
 
 
 def compute_persistence_from_contour_tree(CT: ContourTree) -> PersistenceResult:
+    """Compute persistence directly from a contour tree with split/join context."""
     if CT.split_tree is None or CT.join_tree is None:
         raise ValueError(
             "Computing persistence from contour tree requires both split_tree and join_tree context"

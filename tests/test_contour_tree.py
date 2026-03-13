@@ -13,6 +13,7 @@ from topographer.examples import easy_path_graph, easy_star_graph
 
 
 def test_merge_split_join_trees_combines_edges_and_traces():
+    """Verify split/join merge preserves expected edge set and arc trace on paths."""
     graph = easy_path_graph(6)
 
     ST = compute_split_tree(graph, scalar="scalar")
@@ -26,6 +27,7 @@ def test_merge_split_join_trees_combines_edges_and_traces():
 
 
 def test_reduce_degree_two_nodes_suppresses_chain_vertices():
+    """Check degree-2 reduction contracts a simple chain into one arc."""
     graph = nx.Graph()
     graph.add_edge("a", "b")
     graph.add_edge("b", "c")
@@ -45,6 +47,7 @@ def test_reduce_degree_two_nodes_suppresses_chain_vertices():
 
 
 def test_compute_contour_tree_from_split_join_returns_non_augmented_tree():
+    """Ensure contour tree built from split/join context is non-augmented by default."""
     graph = easy_star_graph(6)
 
     ST = compute_split_tree(graph, scalar="scalar")
@@ -60,6 +63,7 @@ def test_compute_contour_tree_from_split_join_returns_non_augmented_tree():
 
 
 def test_augment_contour_tree_keeps_all_vertices_on_path_graph():
+    """Ensure contour-tree augmentation restores intermediate vertices for path input."""
     graph = easy_path_graph(6)
 
     CT = compute_contour_tree(graph, scalar="scalar")

@@ -1,4 +1,4 @@
-"""Perturbation command implementations."""
+"""CLI command for deterministic scalar tie perturbation."""
 
 from pathlib import Path
 
@@ -37,7 +37,7 @@ def perturb(
         help="Write perturbed values into the input scalar attribute.",
     ),
 ) -> None:
-    """Break tied scalar values and save the perturbed graph."""
+    """Break tied scalar values and save the resulting graph."""
 
     graph = load_graph(input_file)
 

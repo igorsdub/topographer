@@ -9,6 +9,7 @@ from topographer.examples import easy_path_graph
 
 
 def test_critical_helpers_on_path_graph():
+    """Validate lower/upper link and critical-point predicates on a path graph."""
     graph = easy_path_graph(3)
 
     assert lower_link(graph, 1, scalar="scalar") == [0]
@@ -22,6 +23,7 @@ def test_critical_helpers_on_path_graph():
 
 
 def test_sweep_ascending_visits_low_to_high():
+    """Ensure ascending sweep visits nodes in increasing scalar order."""
     graph = easy_path_graph(4)
     seen_orders: list[tuple[int, set[int]]] = []
 
@@ -36,6 +38,7 @@ def test_sweep_ascending_visits_low_to_high():
 
 
 def test_sweep_descending_visits_high_to_low():
+    """Ensure descending sweep visits nodes in decreasing scalar order."""
     graph = easy_path_graph(4)
     visited: list[int] = []
 

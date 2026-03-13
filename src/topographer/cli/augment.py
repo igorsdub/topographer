@@ -1,4 +1,4 @@
-"""Augmentation command group for split and join trees."""
+"""Grouped CLI commands for tree augmentation workflows."""
 
 from pathlib import Path
 
@@ -25,7 +25,7 @@ def join(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute augmented join tree as a post-construction stage."""
+    """Compute and save an augmented join tree with intermediate arc vertices."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     base = compute_join_tree(graph, scalar=scalar)
     result = augment_join_tree(base)
@@ -39,7 +39,7 @@ def split(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute augmented split tree as a post-construction stage."""
+    """Compute and save an augmented split tree with intermediate arc vertices."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     base = compute_split_tree(graph, scalar=scalar)
     result = augment_split_tree(base)
@@ -53,7 +53,7 @@ def contour(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute augmented contour tree as a post-construction stage."""
+    """Compute and save an augmented contour tree with intermediate arc vertices."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     base = compute_contour_tree(graph, scalar=scalar)
     result = augment_contour_tree(base)

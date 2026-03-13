@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Join-tree construction from a scalar graph."""
+
 from collections.abc import Hashable
 
 import networkx as nx
@@ -20,6 +22,11 @@ def compute_join_tree(
     *,
     require_connected: bool = True,
 ) -> JoinTree:
+    """Compute the join tree using an ascending scalar sweep.
+
+    Nodes are visited from low to high scalar value. Component merges and join
+    events are tracked in a sweep context and exported as a ``JoinTree``.
+    """
     check_graph(G, scalar_attr=scalar, require_connected=require_connected)
 
     context = SweepContext()

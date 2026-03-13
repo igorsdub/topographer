@@ -1,16 +1,20 @@
 from __future__ import annotations
 
+"""Degree-2 node contraction for contour-tree cleanup."""
+
 from collections.abc import Hashable
 
 import networkx as nx
 
 
 def _edge_key(a: Hashable, b: Hashable) -> tuple[Hashable, Hashable]:
+    """Return canonical undirected edge key for arc maps."""
     ordered = sorted((a, b), key=repr)
     return ordered[0], ordered[1]
 
 
 def _orient_path(path: list[Hashable], start: Hashable, end: Hashable) -> list[Hashable]:
+    """Orient a stored path from ``start`` to ``end`` when possible."""
     if path and path[0] == start and path[-1] == end:
         return path
 
@@ -21,6 +25,7 @@ def _orient_path(path: list[Hashable], start: Hashable, end: Hashable) -> list[H
 
 
 def _dedupe_consecutive(path: list[Hashable]) -> list[Hashable]:
+    """Remove repeated consecutive vertices from a path."""
     if not path:
         return path
 
@@ -32,6 +37,7 @@ def _dedupe_consecutive(path: list[Hashable]) -> list[Hashable]:
 
 
 def _canonicalize_path(path: list[Hashable]) -> list[Hashable]:
+    """Canonicalize an undirected path representation deterministically."""
     if len(path) <= 1:
         return path
 
@@ -46,6 +52,10 @@ def reduce_degree_two_nodes(
     tree: nx.Graph,
     arc_vertices: dict[tuple[Hashable, Hashable], list[Hashable]],
 ) -> tuple[nx.Graph, dict[tuple[Hashable, Hashable], list[Hashable]]]:
+    """Contract degree-2 nodes by splicing adjacent arcs and their paths.
+
+    Returns a reduced graph plus synchronized ``arc_vertices`` entries.
+    """
     reduced = tree.copy()
     reduced_arc_vertices = dict(arc_vertices)
 

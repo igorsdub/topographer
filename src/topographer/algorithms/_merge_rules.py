@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Component merge rules used by split/join scalar sweeps."""
+
 from collections.abc import Hashable
 from dataclasses import dataclass, field
 from typing import Any
@@ -31,6 +33,12 @@ def _new_tree() -> nx.Graph[Any]:
 
 @dataclass(slots=True)
 class SweepContext:
+    """Mutable state carried through sweep-based tree construction.
+
+    Attributes track current connected components, evolving tree edges, and
+    arc vertex traces used for later augmentation/simplification.
+    """
+
     tree: nx.Graph[Any] = field(default_factory=_new_tree)
     uf: UnionFind = field(default_factory=UnionFind)
     component_head: dict[Hashable, Hashable] = field(default_factory=_new_component_head)
@@ -42,6 +50,7 @@ class SweepContext:
 
 
 def _edge_key(a: Hashable, b: Hashable) -> tuple[Hashable, Hashable]:
+    """Return canonical undirected edge key for arc lookup maps."""
     ordered = sorted((a, b), key=repr)
     return ordered[0], ordered[1]
 
@@ -52,6 +61,7 @@ def _add_arc(
     end: Hashable,
     intermediates: list[Hashable] | None = None,
 ):
+    """Add an arc between two critical nodes and record its vertex trace."""
     middle = intermediates if intermediates is not None else []
     path = [start, *middle, end]
 
@@ -65,6 +75,7 @@ def _add_arc(
 
 
 def _unique_roots(context: SweepContext, neighbors: list[Hashable]) -> list[Hashable]:
+    """Return unique union-find roots for already-seen neighbor nodes."""
     roots: set[Hashable] = set()
 
     for neighbor in neighbors:
@@ -74,6 +85,7 @@ def _unique_roots(context: SweepContext, neighbors: list[Hashable]) -> list[Hash
 
 
 def _initialize_component(context: SweepContext, node: Hashable):
+    """Create a new single-node sweep component rooted at ``node``."""
     context.uf.make_set(node)
     root = context.uf.find(node)
     context.component_head[root] = node
@@ -86,6 +98,7 @@ def _absorb_node_into_component(
     node: Hashable,
     root: Hashable,
 ):
+    """Insert a regular node into an existing component buffer."""
     root = context.uf.find(root)
     head = context.component_head.pop(root)
     buffer = context.component_buffer.pop(root)
@@ -104,6 +117,7 @@ def _merge_components_at_critical(
     node: Hashable,
     roots: list[Hashable],
 ):
+    """Merge multiple components at a new critical node and emit arcs."""
     context.critical_nodes.add(node)
 
     for root in roots:
@@ -128,6 +142,7 @@ def handle_join_event(
     node: Hashable,
     seen_neighbors: list[Hashable],
 ):
+    """Process one node event during ascending sweep (join-tree semantics)."""
     roots = _unique_roots(context, seen_neighbors)
 
     if not roots:
@@ -146,6 +161,7 @@ def handle_split_event(
     node: Hashable,
     seen_neighbors: list[Hashable],
 ):
+    """Process one node event during descending sweep (split-tree semantics)."""
     roots = _unique_roots(context, seen_neighbors)
 
     if not roots:
@@ -160,6 +176,7 @@ def handle_split_event(
 
 
 def finalize_components(context: SweepContext) -> list[Hashable]:
+    """Flush remaining component buffers into final arcs and return roots."""
     roots_to_return: list[Hashable] = []
 
     for root in list(context.component_head.keys()):

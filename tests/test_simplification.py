@@ -12,6 +12,7 @@ from topographer.examples import easy_star_graph
 
 
 def _join_simplification_graph() -> nx.Graph:
+    """Build a star graph fixture with scalar values suited for join simplification."""
     graph = nx.star_graph(4)
     graph.nodes[1]["scalar"] = 0.0
     graph.nodes[2]["scalar"] = 4.0
@@ -22,6 +23,7 @@ def _join_simplification_graph() -> nx.Graph:
 
 
 def _mixed_simplification_graph() -> nx.Graph:
+    """Build a mixed-branch graph fixture used for contour simplification checks."""
     graph = nx.Graph()
     graph.add_edges_from([(0, 1), (1, 2), (2, 3), (1, 4), (2, 5)])
 
@@ -38,6 +40,7 @@ def _mixed_simplification_graph() -> nx.Graph:
 
 
 def test_simplify_join_tree_prunes_low_persistence_leaf_arcs():
+    """Verify join-tree simplification removes low-persistence leaf branches."""
     graph = _join_simplification_graph()
     JT = compute_join_tree(graph, scalar="scalar")
 
@@ -48,6 +51,7 @@ def test_simplify_join_tree_prunes_low_persistence_leaf_arcs():
 
 
 def test_simplify_split_tree_prunes_low_persistence_leaf_arcs():
+    """Verify split-tree simplification removes low-persistence leaf branches."""
     graph = easy_star_graph(4)
     ST = compute_split_tree(graph, scalar="scalar")
 
@@ -58,6 +62,7 @@ def test_simplify_split_tree_prunes_low_persistence_leaf_arcs():
 
 
 def test_simplify_contour_tree_simplifies_split_join_then_recomputes_contour_tree():
+    """Ensure contour simplification updates split/join trees and recomputes contour edges."""
     graph = _mixed_simplification_graph()
     CT = compute_contour_tree(graph, scalar="scalar")
 

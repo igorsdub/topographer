@@ -1,4 +1,4 @@
-"""Contour tree command implementations."""
+"""CLI commands for contour-tree computation."""
 
 from pathlib import Path
 
@@ -18,7 +18,7 @@ def compute(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute contour tree from scalar field."""
+    """Compute a contour tree from the input graph and save the result."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     result = compute_contour_tree(graph, scalar=scalar)
     save_graph(result.tree, output_file)

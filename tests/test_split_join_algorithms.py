@@ -6,6 +6,7 @@ from topographer.examples import easy_path_graph, invalid_disconnected_graph
 
 
 def test_compute_join_tree_non_augmented_path_graph():
+    """Check join-tree computation returns expected critical structure on a path."""
     graph = easy_path_graph(6)
 
     result = compute_join_tree(graph, scalar="scalar")
@@ -19,6 +20,7 @@ def test_compute_join_tree_non_augmented_path_graph():
 
 
 def test_compute_split_tree_non_augmented_path_graph():
+    """Check split-tree computation returns expected critical structure on a path."""
     graph = easy_path_graph(6)
 
     result = compute_split_tree(graph, scalar="scalar")
@@ -33,6 +35,7 @@ def test_compute_split_tree_non_augmented_path_graph():
 
 
 def test_augment_join_tree_keeps_all_vertices():
+    """Verify join-tree augmentation restores intermediate arc vertices."""
     graph = easy_path_graph(6)
 
     result = compute_join_tree(graph, scalar="scalar")
@@ -44,6 +47,7 @@ def test_augment_join_tree_keeps_all_vertices():
 
 
 def test_augment_split_tree_keeps_all_vertices():
+    """Verify split-tree augmentation restores intermediate arc vertices."""
     graph = easy_path_graph(6)
 
     result = compute_split_tree(graph, scalar="scalar")
@@ -56,6 +60,7 @@ def test_augment_split_tree_keeps_all_vertices():
 
 @pytest.mark.parametrize("fn", [compute_join_tree, compute_split_tree])
 def test_split_join_support_disconnected_when_requested(fn):
+    """Ensure algorithms can run on disconnected graphs when explicitly allowed."""
     graph = invalid_disconnected_graph()
 
     result = fn(graph, scalar="scalar", require_connected=False)
@@ -65,6 +70,7 @@ def test_split_join_support_disconnected_when_requested(fn):
 
 @pytest.mark.parametrize("fn", [compute_join_tree, compute_split_tree])
 def test_split_join_reject_disconnected_by_default(fn):
+    """Ensure disconnected graphs are rejected under default validation rules."""
     graph = invalid_disconnected_graph()
 
     with pytest.raises(ValueError, match="Graph must be connected"):

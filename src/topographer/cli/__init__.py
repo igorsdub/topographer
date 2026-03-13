@@ -1,4 +1,4 @@
-"""CLI module for TopoGraph."""
+"""Public CLI application export for Topographer."""
 
 from .main import app
 

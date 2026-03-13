@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Contour-tree construction from split and join trees."""
+
 import networkx as nx
 
 from topographer.algorithms.contour_merge import merge_split_join_trees
@@ -13,6 +15,11 @@ def compute_contour_tree_from_split_join(
     ST: SplitTree,
     JT: JoinTree,
 ) -> ContourTree:
+    """Merge split and join trees and reduce degree-2 regular nodes.
+
+    The resulting contour tree keeps critical nodes and arc-vertex traces needed
+    by downstream persistence and simplification routines.
+    """
     merged_tree, merged_arc_vertices = merge_split_join_trees(ST, JT)
     reduced_tree, reduced_arc_vertices = reduce_degree_two_nodes(merged_tree, merged_arc_vertices)
 
@@ -39,6 +46,7 @@ def compute_contour_tree(
     *,
     require_connected: bool = True,
 ) -> ContourTree:
+    """Compute a contour tree directly from an input scalar graph."""
     ST = compute_split_tree(
         graph,
         scalar=scalar,

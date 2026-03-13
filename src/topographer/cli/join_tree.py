@@ -1,4 +1,4 @@
-"""Join tree command implementations."""
+"""CLI commands for join-tree computation."""
 
 from pathlib import Path
 
@@ -11,7 +11,7 @@ app = typer.Typer()
 
 @app.command()
 def compute(input_file: Path, output_file: Path):
-    """Compute join tree from scalar field."""
+    """Compute a join tree from the input scalar graph and write it to disk."""
     load_and_validate_graph_or_exit(input_file)
 
     typer.echo(f"Computing join tree: {input_file} -> {output_file}")

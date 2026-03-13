@@ -11,6 +11,7 @@ from topographer.io.save import save_graph
 
 
 def _sample_graph() -> nx.Graph:
+    """Create a small attributed graph fixture used across I/O tests."""
     graph = nx.relabel_nodes(easy_path_graph(3), {0: "a", 1: "b", 2: "c"})
     graph.graph["name"] = "sample"
 
@@ -25,6 +26,7 @@ def _sample_graph() -> nx.Graph:
 
 
 def _assert_graph_equal(actual: nx.Graph, expected: nx.Graph) -> None:
+    """Assert node/edge structure and selected attributes are preserved."""
     assert set(actual.nodes) == set(expected.nodes)
     assert set(actual.edges) == set(expected.edges)
 
@@ -36,6 +38,7 @@ def _assert_graph_equal(actual: nx.Graph, expected: nx.Graph) -> None:
 
 
 def _write_with_networkx(graph: nx.Graph, path, file_format: str) -> None:
+    """Write a graph with NetworkX-native serializers for the given format."""
     if file_format == "pkl":
         with path.open("wb") as handle:
             pickle.dump(graph, handle)
@@ -62,6 +65,7 @@ def _write_with_networkx(graph: nx.Graph, path, file_format: str) -> None:
 
 
 def _read_with_networkx(path, file_format: str) -> nx.Graph:
+    """Read a graph with NetworkX-native deserializers for the given format."""
     if file_format == "pkl":
         with path.open("rb") as handle:
             return pickle.load(handle)
@@ -85,6 +89,7 @@ def _read_with_networkx(path, file_format: str) -> nx.Graph:
 
 @pytest.mark.parametrize("file_format", ["pkl", "graphml", "gml", "gexf", "json"])
 def test_load_graph_supported_formats(tmp_path, file_format: str):
+    """Verify ``load_graph`` correctly parses every supported file format."""
     graph = _sample_graph()
     path = tmp_path / f"input.{file_format}"
 
@@ -97,6 +102,7 @@ def test_load_graph_supported_formats(tmp_path, file_format: str):
 
 @pytest.mark.parametrize("file_format", ["pkl", "graphml", "gml", "gexf", "json"])
 def test_save_graph_supported_formats(tmp_path, file_format: str):
+    """Verify ``save_graph`` writes data compatible with NetworkX readers."""
     graph = _sample_graph()
     path = tmp_path / f"output.{file_format}"
 
@@ -109,6 +115,7 @@ def test_save_graph_supported_formats(tmp_path, file_format: str):
 
 @pytest.mark.parametrize("target_format", ["pkl", "graphml", "gml", "gexf", "json"])
 def test_convert_graph_supported_formats(tmp_path, target_format: str):
+    """Verify ``convert_graph`` preserves graph content for each target format."""
     source_graph = _sample_graph()
     source_path = tmp_path / "source.pkl"
     target_path = tmp_path / f"converted.{target_format}"
@@ -123,6 +130,7 @@ def test_convert_graph_supported_formats(tmp_path, target_format: str):
 
 
 def test_load_graph_unsupported_format_raises(tmp_path):
+    """Ensure loading with unsupported file extension raises a clear error."""
     path = tmp_path / "graph.txt"
     path.write_text("not a graph", encoding="utf-8")
 
@@ -131,6 +139,7 @@ def test_load_graph_unsupported_format_raises(tmp_path):
 
 
 def test_save_graph_unsupported_format_raises(tmp_path):
+    """Ensure saving with unsupported file extension raises a clear error."""
     path = tmp_path / "graph.txt"
 
     with pytest.raises(ValueError, match="Unsupported graph format"):
@@ -138,6 +147,7 @@ def test_save_graph_unsupported_format_raises(tmp_path):
 
 
 def test_convert_graph_unsupported_format_raises(tmp_path):
+    """Ensure conversion to unsupported format raises a clear error."""
     source_path = tmp_path / "source.pkl"
     target_path = tmp_path / "target.txt"
 

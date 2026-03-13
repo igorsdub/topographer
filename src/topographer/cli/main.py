@@ -1,4 +1,4 @@
-"""Main CLI entry point."""
+"""Top-level Typer application for Topographer CLI commands."""
 
 from pathlib import Path
 
@@ -52,7 +52,7 @@ def convert(
         help="Target graph format. If omitted, inferred from target extension.",
     ),
 ) -> None:
-    """Convert a graph between supported formats."""
+    """Convert a graph file between supported serialization formats."""
     convert_graph(
         source_path=source_path,
         target_path=target_path,

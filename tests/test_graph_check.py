@@ -11,22 +11,26 @@ from topographer.examples import (
 
 
 def test_check_graph_accepts_valid_connected_graph_with_numeric_scalars():
+    """Confirm a valid connected scalar graph passes baseline validation."""
     G = easy_path_graph(3)
     assert check_graph(G) is True
 
 
 def test_check_graph_rejects_non_networkx_graph():
+    """Ensure non-NetworkX inputs are rejected with a type error."""
     with pytest.raises(TypeError, match="Graph must be a networkx.Graph"):
         check_graph({})
 
 
 def test_check_graph_rejects_empty_graph():
+    """Ensure empty graphs fail validation."""
     G = nx.Graph()
     with pytest.raises(ValueError, match="Graph is empty"):
         check_graph(G)
 
 
 def test_check_graph_rejects_disconnected_graph_when_required():
+    """Ensure disconnected graphs are rejected when connectivity is required."""
     G = invalid_disconnected_graph()
 
     with pytest.raises(ValueError, match="Graph must be connected"):
@@ -34,12 +38,14 @@ def test_check_graph_rejects_disconnected_graph_when_required():
 
 
 def test_check_graph_allows_disconnected_graph_when_not_required():
+    """Ensure disconnected graphs are accepted when connectivity check is disabled."""
     G = invalid_disconnected_graph()
 
     assert check_graph(G, require_connected=False) is True
 
 
 def test_check_graph_rejects_missing_scalar_attribute():
+    """Ensure nodes missing scalar attributes trigger a validation error."""
     G = invalid_missing_scalar_graph()
 
     with pytest.raises(ValueError, match="missing scalar attribute"):
@@ -47,6 +53,7 @@ def test_check_graph_rejects_missing_scalar_attribute():
 
 
 def test_check_graph_rejects_non_numeric_scalar_values():
+    """Ensure non-numeric scalar values are rejected by validation."""
     G = easy_path_graph(2)
     G.nodes[1]["scalar"] = "high"
 
@@ -55,6 +62,7 @@ def test_check_graph_rejects_non_numeric_scalar_values():
 
 
 def test_check_graph_rejects_duplicate_scalar_values():
+    """Ensure duplicate scalar values are rejected to maintain strict ordering."""
     G = invalid_duplicate_scalar_graph()
 
     with pytest.raises(ValueError, match="Duplicate scalar values detected"):

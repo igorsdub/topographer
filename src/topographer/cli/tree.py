@@ -1,4 +1,4 @@
-"""Tree command group for split and join tree computation."""
+"""Grouped CLI commands for join/split/contour tree computation."""
 
 from pathlib import Path
 
@@ -20,7 +20,7 @@ def join(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute join tree from scalar field."""
+    """Compute a join tree from input graph and save it."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     result = compute_join_tree(graph, scalar=scalar)
     save_graph(result.tree, output_file)
@@ -33,7 +33,7 @@ def split(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute split tree from scalar field."""
+    """Compute a split tree from input graph and save it."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     result = compute_split_tree(graph, scalar=scalar)
     save_graph(result.tree, output_file)
@@ -46,7 +46,7 @@ def contour(
     output_file: Path,
     scalar: str = typer.Option("scalar", "--scalar", help="Scalar attribute name."),
 ):
-    """Compute contour tree from scalar field."""
+    """Compute a contour tree from input graph and save it."""
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
     result = compute_contour_tree(graph, scalar=scalar)
     save_graph(result.tree, output_file)

@@ -11,6 +11,7 @@ from topographer.examples import easy_path_graph
 
 
 def test_compute_persistence_from_split_join_on_path_graph():
+    """Check split/join-based persistence returns one expected pair on a path."""
     graph = easy_path_graph(6)
     ST = compute_split_tree(graph, scalar="scalar")
     JT = compute_join_tree(graph, scalar="scalar")
@@ -28,6 +29,7 @@ def test_compute_persistence_from_split_join_on_path_graph():
 
 
 def test_compute_persistence_from_contour_tree_on_path_graph():
+    """Check contour-tree-based persistence returns one expected pair on a path."""
     graph = easy_path_graph(6)
     CT = compute_contour_tree(graph, scalar="scalar")
 
@@ -44,6 +46,7 @@ def test_compute_persistence_from_contour_tree_on_path_graph():
 
 
 def test_compute_persistence_from_contour_tree_requires_split_join_context():
+    """Ensure contour-tree persistence requires both split and join tree context."""
     graph = easy_path_graph(6)
     ST = compute_split_tree(graph, scalar="scalar")
     JT = compute_join_tree(graph, scalar="scalar")

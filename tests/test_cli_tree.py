@@ -10,11 +10,13 @@ runner = CliRunner()
 
 
 def _write_graph(path, graph) -> None:
+    """Persist a graph fixture to disk for CLI invocation tests."""
     with path.open("wb") as handle:
         pickle.dump(graph, handle)
 
 
 def test_tree_join_command_writes_output_graph(tmp_path):
+    """Ensure grouped tree join command writes a valid non-empty output graph."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "join.pkl"
 
@@ -32,6 +34,7 @@ def test_tree_join_command_writes_output_graph(tmp_path):
 
 
 def test_augment_split_command_writes_augmented_tree(tmp_path):
+    """Verify augment split command preserves path-graph size after augmentation."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "split_aug.pkl"
 
@@ -52,6 +55,7 @@ def test_augment_split_command_writes_augmented_tree(tmp_path):
 
 
 def test_augment_join_command_writes_augmented_tree(tmp_path):
+    """Verify augment join command preserves path-graph size after augmentation."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "join_aug.pkl"
 
@@ -72,6 +76,7 @@ def test_augment_join_command_writes_augmented_tree(tmp_path):
 
 
 def test_tree_join_rejects_missing_scalar_attribute(tmp_path):
+    """Check tree join command returns validation error for missing scalar data."""
     source_path = tmp_path / "invalid.pkl"
     output_path = tmp_path / "join.pkl"
 
@@ -84,6 +89,7 @@ def test_tree_join_rejects_missing_scalar_attribute(tmp_path):
 
 
 def test_contour_tree_compute_command_writes_output_graph(tmp_path):
+    """Ensure contour-tree compute command writes a non-empty output graph."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "contour.pkl"
 
@@ -104,6 +110,7 @@ def test_contour_tree_compute_command_writes_output_graph(tmp_path):
 
 
 def test_contour_tree_compute_rejects_augmentation_option(tmp_path):
+    """Confirm unsupported contour-tree CLI options are rejected by Typer parsing."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "contour.pkl"
 
@@ -125,6 +132,7 @@ def test_contour_tree_compute_rejects_augmentation_option(tmp_path):
 
 
 def test_augment_contour_command_writes_augmented_tree(tmp_path):
+    """Verify augment contour command preserves size and reports completion."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "contour_aug.pkl"
 

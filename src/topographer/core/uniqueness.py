@@ -1,11 +1,18 @@
 from __future__ import annotations
 
+"""Utilities for validating uniqueness of node scalar values."""
+
 from collections.abc import Hashable
 
 import networkx as nx
 
 
 def _get_scalar_values(G: nx.Graph, scalar_attr: str = "scalar") -> list[Hashable]:
+    """Collect scalar values from all nodes.
+
+    Raises when the input is not a graph or when a node is missing the scalar
+    attribute.
+    """
     if not isinstance(G, nx.Graph):
         raise TypeError("Graph must be a networkx.Graph")
 
@@ -21,11 +28,17 @@ def _get_scalar_values(G: nx.Graph, scalar_attr: str = "scalar") -> list[Hashabl
 
 
 def are_scalar_values_unique(G: nx.Graph, scalar_attr: str = "scalar") -> bool:
+    """Return ``True`` when all node scalar values are distinct."""
     values = _get_scalar_values(G, scalar_attr=scalar_attr)
     return len(values) == len(set(values))
 
 
 def assert_unique_scalar_values(G: nx.Graph, scalar_attr: str = "scalar") -> bool:
+    """Assert that all node scalar values are unique.
+
+    Returns ``True`` on success and raises ``ValueError`` when duplicates are
+    detected.
+    """
     if not are_scalar_values_unique(G, scalar_attr=scalar_attr):
         raise ValueError("Duplicate scalar values detected")
 

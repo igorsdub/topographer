@@ -1,4 +1,4 @@
-"""Persistence command implementations."""
+"""CLI commands for persistence pair computation and export."""
 
 from enum import Enum
 import json
@@ -20,6 +20,8 @@ app = typer.Typer()
 
 
 class PersistenceMode(str, Enum):
+    """Persistence computation strategy exposed via CLI."""
+
     split_join = "split-join"
     contour = "contour"
 
@@ -36,7 +38,11 @@ def compute(
         case_sensitive=False,
     ),
 ):
-    """Compute persistence pairs from topological structure."""
+    """Compute persistence pairs and write them as JSON output.
+
+    The command supports two modes: building pairs from split/join trees or
+    from a computed contour tree.
+    """
     graph = load_and_validate_graph_or_exit(input_file, scalar_attr=scalar)
 
     if mode is PersistenceMode.split_join:

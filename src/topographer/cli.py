@@ -1,4 +1,4 @@
-"""TopGraph CLI entry point."""
+"""Topographer CLI executable entry point."""
 
 from .cli.main import app
 

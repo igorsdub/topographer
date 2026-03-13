@@ -17,11 +17,13 @@ runner = CliRunner()
 
 
 def _write_pickle_graph(path, graph: nx.Graph) -> None:
+    """Serialize a graph to pickle for CLI file-based test inputs."""
     with path.open("wb") as handle:
         pickle.dump(graph, handle)
 
 
 def test_convert_command_converts_graph(tmp_path):
+    """Verify the top-level convert command rewrites a graph to target format."""
     source_path = tmp_path / "source.pkl"
     target_path = tmp_path / "converted.gexf"
     _write_pickle_graph(source_path, easy_path_graph(2))
@@ -38,11 +40,13 @@ def test_convert_command_converts_graph(tmp_path):
 
 
 def _write_graph(path, graph: nx.Graph) -> None:
+    """Write a graph to pickle for command tests that expect input files."""
     with path.open("wb") as handle:
         pickle.dump(graph, handle)
 
 
 def test_split_tree_compute_rejects_missing_scalar(tmp_path):
+    """Ensure split-tree CLI fails fast when required scalar attributes are missing."""
     source_path = tmp_path / "invalid.pkl"
     output_path = tmp_path / "split_tree.pkl"
 
@@ -60,6 +64,7 @@ def test_split_tree_compute_rejects_missing_scalar(tmp_path):
 
 
 def test_run_pipeline_validates_graph_before_execution(tmp_path):
+    """Confirm pipeline command validates a valid graph and starts execution."""
     source_path = tmp_path / "valid.pkl"
     output_path = tmp_path / "output.pkl"
 
@@ -77,6 +82,7 @@ def test_run_pipeline_validates_graph_before_execution(tmp_path):
 
 
 def test_perturb_ties_cli_writes_perturbed_scalar(tmp_path):
+    """Check perturb command writes an output graph with strict perturbed ordering."""
     source_path = tmp_path / "tied.pkl"
     output_path = tmp_path / "perturbed.pkl"
 
@@ -96,6 +102,7 @@ def test_perturb_ties_cli_writes_perturbed_scalar(tmp_path):
 
 
 def test_perturb_ties_cli_rejects_missing_scalar_attribute(tmp_path):
+    """Ensure perturb command reports a clear error for missing scalar input."""
     source_path = tmp_path / "missing_scalar.pkl"
     output_path = tmp_path / "perturbed.pkl"
 
@@ -112,6 +119,7 @@ def test_perturb_ties_cli_rejects_missing_scalar_attribute(tmp_path):
 
 
 def test_persistence_compute_split_join_mode_writes_pairs(tmp_path):
+    """Verify persistence command in split-join mode emits expected JSON payload."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "persistence_split_join.json"
 
@@ -142,6 +150,7 @@ def test_persistence_compute_split_join_mode_writes_pairs(tmp_path):
 
 
 def test_persistence_compute_contour_mode_writes_pairs(tmp_path):
+    """Verify persistence command in contour mode emits expected JSON payload."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "persistence_contour.json"
 
@@ -172,6 +181,7 @@ def test_persistence_compute_contour_mode_writes_pairs(tmp_path):
 
 
 def test_simplify_threshold_command_writes_simplified_contour_tree(tmp_path):
+    """Check simplify threshold command writes a non-empty simplified contour tree."""
     source_path = tmp_path / "input.pkl"
     output_path = tmp_path / "simplified.pkl"
 

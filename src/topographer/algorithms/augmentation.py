@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+"""Tree augmentation helpers from stored arc-vertex traces."""
+
 from collections.abc import Hashable
 from typing import Any
 
@@ -11,6 +13,7 @@ from topographer.models.tree import ContourTree, JoinTree, SplitTree
 def augment_tree_from_arc_vertices(
     arc_vertices: dict[tuple[Hashable, Hashable], list[Hashable]],
 ) -> nx.Graph[Any]:
+    """Expand compressed arcs into an explicit vertex-by-vertex graph."""
     augmented_tree: nx.Graph[Any] = nx.Graph()
 
     for path in arc_vertices.values():
@@ -28,6 +31,7 @@ def augment_tree_from_arc_vertices(
 
 
 def augment_join_tree(result: JoinTree) -> JoinTree:
+    """Return a join tree whose graph contains all intermediate arc vertices."""
     augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
 
     return JoinTree(
@@ -42,6 +46,7 @@ def augment_join_tree(result: JoinTree) -> JoinTree:
 
 
 def augment_split_tree(result: SplitTree) -> SplitTree:
+    """Return a split tree whose graph contains all intermediate arc vertices."""
     augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
 
     return SplitTree(
@@ -56,6 +61,7 @@ def augment_split_tree(result: SplitTree) -> SplitTree:
 
 
 def augment_contour_tree(result: ContourTree) -> ContourTree:
+    """Return a contour tree whose graph contains all intermediate arc vertices."""
     augmented_tree = augment_tree_from_arc_vertices(result.arc_vertices)
 
     return ContourTree(
