@@ -1,6 +1,7 @@
 import pickle
 
 import networkx as nx
+import pytest
 from typer.testing import CliRunner
 
 from topographer.cli.main import app
@@ -196,3 +197,66 @@ def test_tree_layout_command_rejects_non_tree_graph(tmp_path):
 
     assert result.exit_code == 1
     assert "connected acyclic graph" in result.stdout
+
+
+def test_tree_plot_command_writes_png(tmp_path):
+    """Ensure tree plot command renders and saves a PNG figure."""
+    matplotlib = pytest.importorskip("matplotlib")
+    matplotlib.use("Agg")
+
+    source_path = tmp_path / "tree.pkl"
+    output_path = tmp_path / "tree.png"
+
+    input_graph = easy_path_graph(6)
+    _write_graph(source_path, input_graph)
+
+    result = runner.invoke(
+        app,
+        ["tree", "plot", str(source_path), str(output_path)],
+    )
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert "Saved tree plot" in result.stdout
+
+
+def test_tree_plot_command_writes_html(tmp_path):
+    """Ensure tree plot command supports HTML export with embedded SVG."""
+    matplotlib = pytest.importorskip("matplotlib")
+    matplotlib.use("Agg")
+
+    source_path = tmp_path / "tree.pkl"
+    output_path = tmp_path / "tree_plot.html"
+
+    input_graph = easy_path_graph(6)
+    _write_graph(source_path, input_graph)
+
+    result = runner.invoke(
+        app,
+        ["tree", "plot", str(source_path), str(output_path)],
+    )
+
+    assert result.exit_code == 0
+    assert output_path.exists()
+    assert "Saved tree plot" in result.stdout
+    assert "<svg" in output_path.read_text(encoding="utf-8")
+
+
+def test_tree_plot_command_rejects_unsupported_format(tmp_path):
+    """Check tree plot command fails on unsupported output format."""
+    matplotlib = pytest.importorskip("matplotlib")
+    matplotlib.use("Agg")
+
+    source_path = tmp_path / "tree.pkl"
+    output_path = tmp_path / "tree.bmp"
+
+    input_graph = easy_path_graph(6)
+    _write_graph(source_path, input_graph)
+
+    result = runner.invoke(
+        app,
+        ["tree", "plot", str(source_path), str(output_path)],
+    )
+
+    assert result.exit_code == 1
+    assert "Unsupported figure format" in result.stdout

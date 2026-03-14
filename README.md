@@ -12,7 +12,7 @@
 
 Topological analysis on graphs and networks.
 
-## Project Oragnization
+## Project Organization
 
 ### Structure
 
@@ -108,14 +108,15 @@ H1 --> I
 
 I --> I1([Contour tree])
 
-I1 --> J[Compute persistence]
+I1 --> J[Compute<br/>persistence]
 
 J --> J1([Contour tree<br/>persistence])
 
-J1 --> K[Simplify]
-I1 --> K
+I1 --> K[Simplify]
 
 K --> L1([Simplified<br/>contour tree])
+
+I1 --> M[Visualize / Export]
 ```
 
 ## CLI Convert Example
@@ -209,11 +210,37 @@ topographer tree layout data/tree.pkl data/tree_layout.pkl --root 0 --x-attr x -
 API usage:
 
 ```python
-from topographer import assign_planar_layout, planar_layout
+from topographer import assign_planar_layout, draw_tree, planar_layout, save_figure
 
 pos = planar_layout(tree, scalar="scalar")
 assign_planar_layout(tree, scalar="scalar", x_attr="layout_x", y_attr="layout_y")
+
+fig, ax = draw_tree(tree, pos=pos, with_labels=True)
+save_figure(fig, "tree_plot.svg")
 ```
+
+## Tree Plot Export
+
+Render a tree directly from CLI and save to image/HTML:
+
+```bash
+topographer tree plot data/tree.pkl data/tree.png
+topographer tree plot data/tree.pkl data/tree.pdf
+topographer tree plot data/tree.pkl data/tree.svg --with-labels
+topographer tree plot data/tree.pkl data/tree.html --show-regular
+topographer tree plot data/tree.pkl data/out.any --format svg
+```
+
+Supported save formats are inferred from output extension: `png`, `pdf`, `svg`, `html`.
+
+Useful options:
+
+- `--scalar` to select the scalar attribute used for vertical placement
+- `--root` to force a root node for layout
+- `--x-mode leaf_span` for branch-based horizontal placement
+- `--with-labels` to annotate node ids
+- `--show-regular` to include regular (non-critical) nodes
+- `--format` to force output type when extension is ambiguous
 
 ## Persistence
 

@@ -14,7 +14,13 @@ from topographer.algorithms.simplification import (
     simplify_split_tree,
 )
 from topographer.algorithms.split_tree import compute_split_tree
-from topographer.plotting import assign_planar_layout, planar_layout
+from topographer.plotting import (
+    assign_planar_layout,
+    draw_tree,
+    planar_layout,
+    plot_tree,
+    save_figure,
+)
 
 __all__ = [
     "compute_split_tree",
@@ -29,4 +35,7 @@ __all__ = [
     "simplify_join_tree",
     "planar_layout",
     "assign_planar_layout",
+    "draw_tree",
+    "plot_tree",
+    "save_figure",
 ]

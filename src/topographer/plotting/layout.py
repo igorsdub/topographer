@@ -6,8 +6,20 @@ from typing import Any
 import networkx as nx
 
 
+def get_nx_tree(tree_like: Any) -> nx.Graph[Any]:
+    """Return an ``nx.Graph`` from a tree wrapper or graph object."""
+    if isinstance(tree_like, nx.Graph):
+        return tree_like
+
+    graph = getattr(tree_like, "tree", None)
+    if isinstance(graph, nx.Graph):
+        return graph
+
+    raise TypeError("tree must be an nx.Graph or an object exposing a .tree nx.Graph")
+
+
 def planar_layout(
-    tree: nx.Graph[Any],
+    tree: Any,
     *,
     scalar: str = "scalar",
     root: Any | None = None,
@@ -18,23 +30,24 @@ def planar_layout(
     Y coordinates are read from node scalar values. X coordinates are
     computed by the configured ``x_mode`` strategy.
     """
-    _validate_tree_input(tree, scalar)
+    graph = get_nx_tree(tree)
+    _validate_tree_input(graph, scalar)
 
-    resolved_root = _resolve_root(tree, scalar=scalar, root=root)
-    _, children = _build_rooted_view(tree, resolved_root)
+    resolved_root = _resolve_root(graph, scalar=scalar, root=root)
+    _, children = _build_rooted_view(graph, resolved_root)
 
-    y_pos = _compute_y_positions(tree, scalar=scalar)
+    y_pos = _compute_y_positions(graph, scalar=scalar)
 
     if x_mode == "leaf_span":
         x_pos = _compute_x_leaf_span(resolved_root, children)
     else:
         raise ValueError(f"Unknown x_mode: {x_mode!r}")
 
-    return {node: (x_pos[node], y_pos[node]) for node in tree.nodes}
+    return {node: (x_pos[node], y_pos[node]) for node in graph.nodes}
 
 
 def assign_planar_layout(
-    tree: nx.Graph[Any],
+    tree: Any,
     *,
     scalar: str = "scalar",
     root: Any | None = None,
@@ -44,12 +57,13 @@ def assign_planar_layout(
     pos_attr: str = "pos",
 ) -> dict[Any, tuple[float, float]]:
     """Compute planar layout and assign coordinates to node attributes."""
-    pos = planar_layout(tree, scalar=scalar, root=root, x_mode=x_mode)
+    graph = get_nx_tree(tree)
+    pos = planar_layout(graph, scalar=scalar, root=root, x_mode=x_mode)
 
     for node, (x_coord, y_coord) in pos.items():
-        tree.nodes[node][x_attr] = x_coord
-        tree.nodes[node][y_attr] = y_coord
-        tree.nodes[node][pos_attr] = (x_coord, y_coord)
+        graph.nodes[node][x_attr] = x_coord
+        graph.nodes[node][y_attr] = y_coord
+        graph.nodes[node][pos_attr] = (x_coord, y_coord)
 
     return pos
 
