@@ -228,7 +228,6 @@ topographer tree plot data/tree.pkl data/tree.png
 topographer tree plot data/tree.pkl data/tree.pdf
 topographer tree plot data/tree.pkl data/tree.svg --with-labels
 topographer tree plot data/tree.pkl data/tree.html --show-regular
-topographer tree plot data/tree.pkl data/out.any --format svg
 ```
 
 Supported save formats are inferred from output extension: `png`, `pdf`, `svg`, `html`.
@@ -240,7 +239,6 @@ Useful options:
 - `--x-mode leaf_span` for branch-based horizontal placement
 - `--with-labels` to annotate node ids
 - `--show-regular` to include regular (non-critical) nodes
-- `--format` to force output type when extension is ambiguous
 
 ## Persistence
 

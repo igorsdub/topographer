@@ -119,11 +119,6 @@ def plot(
         "--show-regular",
         help="Display regular (non-critical) nodes.",
     ),
-    output_format: str | None = typer.Option(
-        None,
-        "--format",
-        help="Output image format: png, pdf, svg, html. Default is inferred from output path.",
-    ),
 ):
     """Render a planar tree plot and export it to an image/HTML file."""
     try:
@@ -137,7 +132,7 @@ def plot(
             show_regular=show_regular,
             scalar_attr=scalar,
         )
-        save_figure(fig, output_file, format=output_format)
+        save_figure(fig, output_file)
     except (RuntimeError, TypeError, ValueError) as exc:
         typer.echo(str(exc))
         raise typer.Exit(code=1) from exc
