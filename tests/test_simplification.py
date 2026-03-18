@@ -1,13 +1,12 @@
 import networkx as nx
 
 from topographer.algorithms.contour_tree import compute_contour_tree
-from topographer.algorithms.join_tree import compute_join_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.algorithms.simplification import (
     simplify_contour_tree,
     simplify_join_tree,
     simplify_split_tree,
 )
-from topographer.algorithms.split_tree import compute_split_tree
 from topographer.examples import easy_star_graph
 
 

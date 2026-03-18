@@ -7,8 +7,7 @@ import networkx as nx
 import typer
 
 from topographer.algorithms.contour_tree import compute_contour_tree
-from topographer.algorithms.join_tree import compute_join_tree
-from topographer.algorithms.split_tree import compute_split_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.io.load import load_graph
 from topographer.io.save import save_graph
 from topographer.plotting import draw_tree, planar_layout, save_figure

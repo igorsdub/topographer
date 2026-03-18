@@ -9,8 +9,7 @@ from topographer.algorithms.contour_tree import (
 )
 from topographer.algorithms.deaugmentation import deaugment_merge_tree
 from topographer.algorithms.degree_reduction import reduce_degree_two_nodes
-from topographer.algorithms.join_tree import compute_join_tree
-from topographer.algorithms.split_tree import compute_split_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.examples import easy_path_graph, easy_star_graph
 from topographer.models.tree import MergeTree
 from topographer.transforms.perturb import perturb_ties

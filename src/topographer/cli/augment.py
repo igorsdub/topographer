@@ -10,8 +10,7 @@ from topographer.algorithms.augmentation import (
     augment_split_tree,
 )
 from topographer.algorithms.contour_tree import compute_contour_tree
-from topographer.algorithms.join_tree import compute_join_tree
-from topographer.algorithms.split_tree import compute_split_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.io.save import save_graph
 
 from ._validation import load_and_validate_graph_or_exit

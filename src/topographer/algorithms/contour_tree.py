@@ -5,8 +5,7 @@ from __future__ import annotations
 import networkx as nx
 
 from topographer.algorithms.contour_prune import compute_contour_tree_by_pruning
-from topographer.algorithms.join_tree import compute_join_tree
-from topographer.algorithms.split_tree import compute_split_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.models.tree import ContourTree, MergeTree
 
 

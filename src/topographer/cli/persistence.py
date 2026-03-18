@@ -7,12 +7,11 @@ from pathlib import Path
 import typer
 
 from topographer.algorithms.contour_tree import compute_contour_tree
-from topographer.algorithms.join_tree import compute_join_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.algorithms.persistence import (
     compute_persistence_from_contour_tree,
     compute_persistence_from_split_join,
 )
-from topographer.algorithms.split_tree import compute_split_tree
 
 from ._validation import load_and_validate_graph_or_exit
 

@@ -11,13 +11,12 @@ import networkx as nx
 
 from topographer.algorithms.contour_tree import compute_contour_tree_from_split_join
 from topographer.algorithms.deaugmentation import deaugment_contour_tree
-from topographer.algorithms.join_tree import compute_join_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.algorithms.persistence import (
     compute_persistence_from_contour_tree,
     compute_persistence_from_split_join,
 )
 from topographer.algorithms.simplification import simplify_contour_tree
-from topographer.algorithms.split_tree import compute_split_tree
 from topographer.core.graph_check import check_graph
 from topographer.models.persistence import PersistenceResult
 from topographer.models.tree import ContourTree, MergeTree

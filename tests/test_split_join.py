@@ -1,6 +1,5 @@
 from topographer.algorithms.augmentation import augment_join_tree, augment_split_tree
-from topographer.algorithms.join_tree import compute_join_tree
-from topographer.algorithms.split_tree import compute_split_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.examples import easy_star_graph
 from topographer.models.tree import MergeTree
 

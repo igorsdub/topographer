@@ -1,12 +1,11 @@
 import pytest
 
 from topographer.algorithms.contour_tree import compute_contour_tree
-from topographer.algorithms.join_tree import compute_join_tree
+from topographer.algorithms.merge_tree import compute_join_tree, compute_split_tree
 from topographer.algorithms.persistence import (
     compute_persistence_from_contour_tree,
     compute_persistence_from_split_join,
 )
-from topographer.algorithms.split_tree import compute_split_tree
 from topographer.examples import easy_path_graph
 from topographer.models.tree import MergeTree
 
