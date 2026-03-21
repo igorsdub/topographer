@@ -1,7 +1,3 @@
-Here is a clean, practical **AGENTS.md** tailored to your `topographer` project. It’s designed for Codex/agents (and future you) to stay consistent and not break the architecture.
-
----
-
 # AGENTS.md
 
 ## Purpose
@@ -246,7 +242,3 @@ When extending:
 > This code should be understandable in ~10 minutes by a human.
 
 If an agent produces something that violates this, it is wrong.
-
----
-
-If you want, I can also generate a **pyproject.toml + pytest config + CI setup** to complete the dev loop.
