@@ -56,32 +56,20 @@ def main() -> None:
             node: (0.0, float(tree_graph.nodes[node][scalar_attr])) for node in trunk_path
         }
 
-        def lane_signs() -> list[int]:
-            signs: list[int] = []
-            lane = 1
-            while len(signs) < 64:
-                signs.append(lane)
-                signs.append(-lane)
-                lane += 1
-            return signs
-
-        signs = lane_signs()
-
         for trunk_node in trunk_path:
             branch_roots = [child for child in children[trunk_node] if child not in trunk_set]
             for branch_index, branch_root in enumerate(branch_roots):
-                lane = abs(signs[branch_index])
-                sign = 1 if signs[branch_index] > 0 else -1
+                sign = 1 if branch_index % 2 == 0 else -1
 
                 queue: deque[tuple[object, int]] = deque([(branch_root, 1)])
                 while queue:
-                    node, dist = queue.popleft()
-                    x_coord = sign * (float(lane) + 0.35 * float(dist - 1))
+                    node, dist_from_trunk = queue.popleft()
+                    x_coord = sign * float(dist_from_trunk)
                     y_coord = float(tree_graph.nodes[node][scalar_attr])
                     pos[node] = (x_coord, y_coord)
 
                     for child in children[node]:
-                        queue.append((child, dist + 1))
+                        queue.append((child, dist_from_trunk + 1))
 
         return pos
 
